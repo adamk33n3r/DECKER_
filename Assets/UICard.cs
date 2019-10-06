@@ -6,6 +6,7 @@ using TMPro;
 public class UICard : MonoBehaviour
 {
     public TextMeshProUGUI title;
+    public TextMeshProUGUI level;
     public TextMeshProUGUI description;
 
     private CardController controller;
@@ -19,10 +20,18 @@ public class UICard : MonoBehaviour
         this.controller = GetComponentInParent<CardController>();
         this.canvasGroup = GetComponent<CanvasGroup>();
         this.title.text = this.controller.card.name;
-        string effects = this.controller.card.effects.Count > 0 ? "" : "No Effects";
-        foreach (var effect in this.controller.card.effects)
+        this.level.text = string.Format("Level {0}", this.controller.card.level);
+        string effects = "";
+        if (this.controller.card.physicalDamage > 0)
+            effects += string.Format("DMG: {0}\n", this.controller.card.physicalDamage);
+        foreach (var cardEffect in this.controller.card.effects)
         {
-            effects += string.Format("{0} +{1}: {2}\n", effect.name, effect.amount, effect.time);
+            string target = cardEffect.target == Target.Self ? "Self" : "Enemy";
+            // Is instant. e.g. Reboot or Heal
+            if (cardEffect.time == 0)
+                effects += string.Format("{0} ({1}) +{2}\n", cardEffect.effect.name, target, cardEffect.amount);
+            else
+                effects += string.Format("{0} ({3}) +{1}: {2}\n", cardEffect.effect.name, cardEffect.amount, cardEffect.time, target);
         }
         this.description.text = effects;
     }

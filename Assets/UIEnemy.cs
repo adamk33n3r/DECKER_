@@ -8,7 +8,7 @@ public class UIEnemy : MonoBehaviour
     public TextMeshProUGUI enemyName;
     public TextMeshProUGUI activeEffects;
     public TextMeshProUGUI hp;
-    public TextMeshProUGUI att;
+    public TextMeshProUGUI str;
 
     private EnemyController controller;
 
@@ -26,14 +26,14 @@ public class UIEnemy : MonoBehaviour
 
     public void UpdateText()
     {
-        this.enemyName.text = this.controller.name;
+        this.enemyName.text = this.controller.enemyData.name;
         string activeEffects = "";
         foreach (var activeEffect in this.controller.activeEffects)
         {
-            activeEffects += string.Format("{0} +{1}: {2}\n", activeEffect.effect.name, activeEffect.effect.amount, activeEffect.timer);
+            activeEffects += string.Format("{0} +{1}: {2}\n", activeEffect.effect.name, activeEffect.amount, activeEffect.timer);
         }
         this.activeEffects.text = activeEffects;
         this.hp.text = string.Format("HP: {0}", this.controller.health);
-        this.att.text = string.Format("ATT: {0}+{1}", this.controller.damage, this.controller.damageMod);
+        this.str.text = string.Format("STR: {0}", this.controller.damageMod);
     }
 }
