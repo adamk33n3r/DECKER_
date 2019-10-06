@@ -11,20 +11,6 @@ public class CardPoolController : MonoBehaviour
     public CardController cardPrefab;
     public GameObject poolLocation;
 
-    private void Awake()
-    {
-        //this.gameObject.SetActive(false);
-    }
-
-    private void Start()
-    {
-        
-    }
-
-    private void Update()
-    {
-        
-    }
     private void OnEnable()
     {
         var selectedCards = this.availableCards.GetCards(this.playerLevel);
@@ -47,7 +33,6 @@ public class CardPoolController : MonoBehaviour
 
             cardController.gameObject.transform.Translate(new Vector3((width + padding) * pos - startingPos, 0, 0));
 
-            // Clear existing listener
             var button = cardController.gameObject.GetComponentInChildren<Button>();
             button.onClick.AddListener(() => { AddCardToDeck(card); });
             pos++;

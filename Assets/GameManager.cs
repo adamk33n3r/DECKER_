@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -15,19 +14,27 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     //public event Action<EnemyController> OnEnemyAction = (enemy) => { };
-    public event Action OnActionOnPlayer = () => { };
+    public event System.Action OnActionOnPlayer = () => { };
 
     public IntegerVariable maxPlayerHP;
     public IntegerVariable playerHP;
     public Inventory startingPlayerInventory;
     public Inventory playerInventory;
+
     public IntegerVariable playerGuard;
     public IntegerVariable playerLevel;
     public IntegerVariable playerXP;
     public IntegerVariable playerDamageMod;
+    public IntegerVariable playerHackerTokens;
+    public IntegerVariable defaultHandSize;
+
     public GameObject cardLocation;
     public CardController cardPrefab;
     public CardPoolController cardPool;
+
+    public ShopController shop;
+
+    public ModuleList playerModules;
 
     public List<ActiveEffect> activeEffects = new List<ActiveEffect>();
 
@@ -127,7 +134,11 @@ public class GameManager : MonoBehaviour
             //Debug.Log("process effects");
             enemy.ProcessEffects();
             if (enemy.health <= 0)
+            {
+                // YOU WIN
+                this.shop.gameObject.SetActive(true);
                 Destroy(enemy.gameObject);
+            }
         }
     }
 
@@ -191,6 +202,7 @@ public class GameManager : MonoBehaviour
     private void SetUp()
     {
         this.cardPool.gameObject.SetActive(false);
+        this.playerModules.modules.Clear();
         // Disable cards in editor
         for (int i = 0; i < this.cardLocation.transform.childCount; i++)
         {
@@ -201,6 +213,7 @@ public class GameManager : MonoBehaviour
         this.playerLevel.Value = 1;
         this.playerXP.Value = 0;
         this.playerHP.Value = this.maxPlayerHP.Value;
+        this.playerHackerTokens.Value = 0;
         this.playerInventory.deck.Clear();
         foreach (var card in this.startingPlayerInventory.deck) {
             this.playerInventory.deck.Add(card);
@@ -269,17 +282,26 @@ public class GameManager : MonoBehaviour
     }
 
     private void DrawCards() {
+        this.shop.gameObject.SetActive(true);
+
         int pos = 0;
         float width = 3f;
         float padding = 0.25f;
-        foreach (var card in this.playerInventory.deck)
+
+        var copy = new List<Card>(this.playerInventory.deck);
+
+        for (int i = 0; i < this.defaultHandSize; i++)
         {
+            int rand = Random.Range(0, copy.Count);
+            var cardToDraw = copy[rand];
+
             var cardCont = Instantiate(this.cardPrefab, this.cardLocation.transform);
-            cardCont.card = card;
+            cardCont.card = cardToDraw;
             cardCont.GetComponentInChildren<Button>().onClick.AddListener(() => { cardCont.Activate(); });
             cardCont.gameObject.transform.Translate(new Vector3((width + padding) * pos, 0, 0));
             pos++;
         }
+
     }
 
 }
