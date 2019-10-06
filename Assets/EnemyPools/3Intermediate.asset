@@ -10,7 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1066402dbacf0eb4e832f3cda2fed265, type: 3}
-  m_Name: Simple
+  m_Name: 3Intermediate
   m_EditorClassIdentifier: 
   pool:
-  - {fileID: 11400000, guid: 1a0c3fedc352c944eac0ee1886becf0d, type: 2}
+  - {fileID: 11400000, guid: 51b2ef9506abea84790a24dcc6af040f, type: 2}
+  - {fileID: 11400000, guid: a8cfa581f6c619843b416e87a8fa5016, type: 2}
+  - {fileID: 11400000, guid: bb74b5403ace4394ebccfc16fb8596c7, type: 2}

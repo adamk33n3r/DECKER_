@@ -49,6 +49,17 @@ public class ShopController : MonoBehaviour
         }
     }
 
+    public void Pass()
+    {
+        // Remove module game objects
+        for (int child = 0; child < this.moduleLocation.transform.childCount; child++)
+        {
+            Destroy(this.moduleLocation.transform.GetChild(child).gameObject);
+        }
+        this.gameObject.SetActive(false);
+        GameManager.Instance.StartNewRound();
+    }
+
     private void PurchaseModule(Module module)
     {
         this.playerHackerTokens -= module.price;
@@ -60,5 +71,6 @@ public class ShopController : MonoBehaviour
             Destroy(this.moduleLocation.transform.GetChild(child).gameObject);
         }
         this.gameObject.SetActive(false);
+        GameManager.Instance.StartNewRound();
     }
 }

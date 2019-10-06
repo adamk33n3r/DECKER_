@@ -10,4 +10,6 @@ public class Enemy : ScriptableObject
 
     [Range(-5, 5)]
     public int levelMod;
+
+    public int startingHealth = 20;
 }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Reboot
   m_EditorClassIdentifier: 
   physicalDamage: 0
-  level: 1
+  level: 4
   effects:
   - effect: {fileID: 11400000, guid: ffdbb3b57184fd44683d0d1bdb1c4ca5, type: 2}
     target: 1

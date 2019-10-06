@@ -33,6 +33,8 @@ public class EnemyController : MonoBehaviour
         foreach (var card in this.enemyData.startingInventory.deck) {
             this.inventory.deck.Add(card);
         }
+
+        this.health = this.enemyData.startingHealth;
     }
 
     public void ProcessEffects()
@@ -43,6 +45,7 @@ public class EnemyController : MonoBehaviour
 
         this.damageMod = 0;
         this.scry = false;
+        this.guard = 0;
         foreach (var activeEffect in this.activeEffects)
         {
             switch (activeEffect.effect.name)
@@ -103,10 +106,12 @@ public class EnemyController : MonoBehaviour
             if (firstCard != null)
             {
                 //this.inventory.deck.Add(firstCard);
-                //if (this.scry) {
-                Debug.Log("They are playing this card!!!!!");
-                Debug.Log(firstCard);
-                //}
+                if (this.scry)
+                {
+                    Debug.Log("They are playing this card!!!!!");
+                    Debug.Log(firstCard);
+                    //GameManager.Instance.Log(string.Format("", firstCard.name));
+                }
                 GameManager.Instance.PlayEnemyCard(this, firstCard);
             }
         }

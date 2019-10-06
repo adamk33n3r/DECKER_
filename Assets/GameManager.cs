@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public enum Turn
@@ -32,17 +33,23 @@ public class GameManager : MonoBehaviour
     public CardController cardPrefab;
     public CardPoolController cardPool;
 
+    public LogController logController;
+
     public ShopController shop;
 
     public ModuleList playerModules;
 
     public List<ActiveEffect> activeEffects = new List<ActiveEffect>();
+    public List<Enemy> enemies;
+    public EnemyController enemyPrefab;
 
     public Turn WhichTurn = Turn.Player;
 
     private bool pierce = false;
     private bool stunned = false;
     //private bool playerIsFocused = false;
+    private int cardsPlayedThisTurn = 0;
+    private int winCount = 0;
 
     private void Awake()
     {
@@ -52,6 +59,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         SetUp();
+        StartNewRound();
         DrawCards();
     }
 
@@ -61,6 +69,11 @@ public class GameManager : MonoBehaviour
             Application.Quit();
     }
 
+    public void Log(string text)
+    {
+        this.logController.Log(text);
+    }
+
     public void ProcessCard(Card card, EnemyController enemy)
     {
         if (WhichTurn == Turn.Enemies)
@@ -68,6 +81,7 @@ public class GameManager : MonoBehaviour
 
         // Self
         Debug.Log("Player playing card: " + card);
+        this.cardsPlayedThisTurn++;
 
         this.pierce = false;
         foreach (var cardEffect in card.effects.Where((effect) => effect.target == Target.Self))
@@ -92,7 +106,11 @@ public class GameManager : MonoBehaviour
                     this.playerInventory.deck.Clear();
                     break;
                 default:
-                    this.activeEffects.Add(new ActiveEffect { effect = cardEffect.effect, amount = cardEffect.amount, timer = cardEffect.time });
+                    int amount = cardEffect.amount;
+                    bool hasTrojan = this.playerModules.modules.Any((module) => module.name == "Trojan");
+                    if (hasTrojan)
+                        amount++;
+                    this.activeEffects.Add(new ActiveEffect { effect = cardEffect.effect, amount = amount, timer = cardEffect.time });
                     break;
             }
         }
@@ -105,8 +123,20 @@ public class GameManager : MonoBehaviour
         }
         enemy.AddEffects(card.effects.Where((effect) => effect.target == Target.Enemy));
 
+        int totalDamage = card.physicalDamage + this.playerDamageMod;
+        bool hasHalfAdder = this.playerModules.modules.Any((module) => module.name == "Half Adder");
+        if (hasHalfAdder)
+            totalDamage++;
+
         if (card.physicalDamage != 0)
-            enemy.TakeDamage(card.physicalDamage + this.playerDamageMod, this.pierce);
+            enemy.TakeDamage(totalDamage, this.pierce);
+
+        if (this.cardsPlayedThisTurn == 1)
+        {
+            bool hasFloppyDrive = this.playerModules.modules.Any((module) => module.name == "Floppy Drive");
+            if (hasFloppyDrive)
+                return;
+        }
 
         SwitchToTurn(Turn.Enemies);
     }
@@ -135,15 +165,17 @@ public class GameManager : MonoBehaviour
             enemy.ProcessEffects();
             if (enemy.health <= 0)
             {
-                // YOU WIN
-                this.shop.gameObject.SetActive(true);
                 Destroy(enemy.gameObject);
+                WinGame();
             }
         }
     }
 
     public void PlayEnemyCard(EnemyController enemy, Card card)
     {
+
+        Debug.Log("enemy is playing card");
+        this.logController.Log(string.Format("{0} played {1}", enemy.name, card.name));
 
         foreach (var cardEffect in card.effects.Where((effect) => effect.target == Target.Self))
         {
@@ -168,11 +200,18 @@ public class GameManager : MonoBehaviour
 
         Debug.Log(card.physicalDamage + enemy.damageMod);
         Debug.Log(this.playerGuard.Value);
-        int modDamage = (card.physicalDamage + enemy.damageMod) - (pierce ? 0 : this.playerGuard.Value);
+        int guardModule = this.playerModules.modules.Any((module) => module.name == "Hard Target") ? 1 : 0;
+        int guard = pierce ? 0 : (this.playerGuard.Value + guardModule);
+        int modDamage = (card.physicalDamage + enemy.damageMod) - guard;
         Debug.Log(modDamage);
         int totalDamage = Mathf.Clamp(modDamage, 0, modDamage);
         Debug.Log(totalDamage);
         this.playerHP.Value -= totalDamage;
+
+        if (this.playerHP.Value <= 0)
+        {
+            LoseGame();
+        }
 
         OnActionOnPlayer();
     }
@@ -224,6 +263,9 @@ public class GameManager : MonoBehaviour
     {
         this.playerGuard.Value = 0;
         this.playerDamageMod = 0;
+        bool hasPassiveScanner = this.playerModules.modules.Any((module) => module.name == "Passive Scanner");
+        if (hasPassiveScanner)
+            this.playerHP.Value++;
         foreach (var activeEffect in this.activeEffects)
         {
             switch (activeEffect.effect.name)
@@ -262,6 +304,7 @@ public class GameManager : MonoBehaviour
     {
         if (turn == Turn.Player)
         {
+            this.cardsPlayedThisTurn = 0;
             ProcessActiveEffects();
             if (!this.stunned)
                 DrawCards();
@@ -282,18 +325,24 @@ public class GameManager : MonoBehaviour
     }
 
     private void DrawCards() {
-        this.shop.gameObject.SetActive(true);
-
         int pos = 0;
         float width = 3f;
         float padding = 0.25f;
 
         var copy = new List<Card>(this.playerInventory.deck);
 
-        for (int i = 0; i < this.defaultHandSize; i++)
+        int handSize = this.defaultHandSize;
+        bool hasGripGloves = this.playerModules.modules.Any((module) => module.name == "Grip Gloves");
+        if (hasGripGloves)
+            handSize++;
+
+        for (int i = 0; i < handSize; i++)
         {
+            if (copy.Count == 0)
+                break;
             int rand = Random.Range(0, copy.Count);
             var cardToDraw = copy[rand];
+            copy.RemoveAt(rand);
 
             var cardCont = Instantiate(this.cardPrefab, this.cardLocation.transform);
             cardCont.card = cardToDraw;
@@ -302,6 +351,27 @@ public class GameManager : MonoBehaviour
             pos++;
         }
 
+    }
+
+    public void StartNewRound()
+    {
+        var newEnemy = this.enemies[this.winCount];
+        var enemy = Instantiate(this.enemyPrefab);
+        enemy.enemyData = newEnemy;
+    }
+
+    private void WinGame() {
+        this.winCount++;
+        if (this.winCount == 5)
+        {
+            SceneManager.LoadScene("Win");
+        }
+        this.playerHackerTokens++;
+        this.shop.gameObject.SetActive(true);
+    }
+
+    private void LoseGame() {
+        SceneManager.LoadScene("Lose");
     }
 
 }
