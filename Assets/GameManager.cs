@@ -357,6 +357,7 @@ public class GameManager : MonoBehaviour
     {
         var newEnemy = this.enemies[this.winCount];
         var enemy = Instantiate(this.enemyPrefab);
+        this.playerHP.Value = this.maxPlayerHP.Value;
         enemy.enemyData = newEnemy;
     }
 
