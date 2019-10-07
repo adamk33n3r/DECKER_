@@ -12,6 +12,7 @@ public class SoundManager : MonoBehaviour
     void Start()
     {
         this.source = GetComponent<AudioSource>();
+        DontDestroyOnLoad(this.gameObject);
     }
 
     // Update is called once per frame

@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
 
     public IntegerVariable playerGuard;
     public IntegerVariable playerLevel;
+    public IntegerVariable startingPlayerLevel;
     public IntegerVariable playerXP;
     public IntegerVariable playerDamageMod;
     public IntegerVariable playerHackerTokens;
@@ -90,6 +91,8 @@ public class GameManager : MonoBehaviour
             {
                 case "Heal":
                     this.playerHP.Value += cardEffect.amount;
+                    if (this.playerHP.Value > this.maxPlayerHP.Value)
+                        this.playerHP.Value = this.maxPlayerHP.Value;
                     break;
                 case "Pierce":
                     this.pierce = true;
@@ -183,6 +186,8 @@ public class GameManager : MonoBehaviour
             {
                 case "Heal":
                     enemy.health += cardEffect.amount;
+                    if (enemy.health > enemy.enemyData.startingHealth)
+                        enemy.health = enemy.enemyData.startingHealth;
                     break;
                 case "Pierce":
                     enemy.pierce = true;
@@ -242,21 +247,13 @@ public class GameManager : MonoBehaviour
     {
         this.cardPool.gameObject.SetActive(false);
         this.playerModules.modules.Clear();
+        this.playerHackerTokens.Value = 0;
         // Disable cards in editor
         for (int i = 0; i < this.cardLocation.transform.childCount; i++)
         {
             this.cardLocation.transform.GetChild(i).gameObject.SetActive(false);
         }
 
-        this.playerGuard.Value = 0;
-        this.playerLevel.Value = 1;
-        this.playerXP.Value = 0;
-        this.playerHP.Value = this.maxPlayerHP.Value;
-        this.playerHackerTokens.Value = 0;
-        this.playerInventory.deck.Clear();
-        foreach (var card in this.startingPlayerInventory.deck) {
-            this.playerInventory.deck.Add(card);
-        }
     }
 
     private void ProcessActiveEffects()
@@ -357,8 +354,16 @@ public class GameManager : MonoBehaviour
     {
         var newEnemy = this.enemies[this.winCount];
         var enemy = Instantiate(this.enemyPrefab);
-        this.playerHP.Value = this.maxPlayerHP.Value;
         enemy.enemyData = newEnemy;
+
+        this.playerGuard.Value = 0;
+        this.playerLevel.Value = this.startingPlayerLevel.Value;
+        this.playerXP.Value = 0;
+        this.playerHP.Value = this.maxPlayerHP.Value;
+        this.playerInventory.deck.Clear();
+        foreach (var card in this.startingPlayerInventory.deck) {
+            this.playerInventory.deck.Add(card);
+        }
     }
 
     private void WinGame() {
