@@ -35,6 +35,7 @@ public class EnemyController : MonoBehaviour
         }
 
         this.health = this.enemyData.startingHealth;
+        this.name = this.enemyData.name;
     }
 
     public void ProcessEffects()

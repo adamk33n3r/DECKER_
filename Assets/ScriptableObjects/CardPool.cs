@@ -18,6 +18,8 @@ public class CardPool : ScriptableObject
 
     public IEnumerable<Card> GetCards(int hackerLevel)
     {
+        // Artificially limit how many cards you can get so it doesn't go out of bounds
+        hackerLevel = Mathf.Min(hackerLevel, 5);
         List<Card> selectedCards = new List<Card>(hackerLevel);
         // Higher level more cards to choose from
         int rank = -1;

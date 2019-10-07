@@ -178,7 +178,7 @@ public class GameManager : MonoBehaviour
     {
 
         Debug.Log("enemy is playing card");
-        this.logController.Log(string.Format("{0} played {1}", enemy.name, card.name));
+        this.logController.Log(string.Format("{0}   played   {1}", enemy.name, card.name));
 
         foreach (var cardEffect in card.effects.Where((effect) => effect.target == Target.Self))
         {
@@ -364,6 +364,8 @@ public class GameManager : MonoBehaviour
         foreach (var card in this.startingPlayerInventory.deck) {
             this.playerInventory.deck.Add(card);
         }
+
+        WhichTurn = Turn.Player;
     }
 
     private void WinGame() {
