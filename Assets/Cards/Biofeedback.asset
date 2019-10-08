@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Biofeedback
   m_EditorClassIdentifier: 
   physicalDamage: 0
-  level: 3
+  level: 1
   effects:
   - effect: {fileID: 11400000, guid: c45d0c18510beeb4a958da3194c4d21e, type: 2}
     target: 0

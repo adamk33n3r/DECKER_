@@ -28,6 +28,8 @@ public class UIEnemy : MonoBehaviour
     {
         this.enemyName.text = this.controller.enemyData.name;
         string activeEffects = "";
+        //if (this.controller.stunned)
+        //    activeEffects += "Stunned\n";
         foreach (var activeEffect in this.controller.activeEffects)
         {
             activeEffects += string.Format("{0} +{1}: {2}\n", activeEffect.effect.name, activeEffect.amount, activeEffect.timer);

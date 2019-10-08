@@ -24,6 +24,8 @@ public class UIPlayer : MonoBehaviour
         this.levelText.text = string.Format("Level: {0}", this.level.Value);
 
         string activeEffects = "";
+        if (GameManager.Instance.stunned)
+            activeEffects += "Stunned\n";
         foreach (var activeEffect in GameManager.Instance.activeEffects)
         {
             activeEffects += string.Format("{0} +{1}: {2}\n", activeEffect.effect.name, activeEffect.amount, activeEffect.timer);

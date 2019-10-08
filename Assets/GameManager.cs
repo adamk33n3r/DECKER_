@@ -46,8 +46,9 @@ public class GameManager : MonoBehaviour
 
     public Turn WhichTurn = Turn.Player;
 
+    public bool stunned = false;
+    [SerializeField]
     private bool pierce = false;
-    private bool stunned = false;
     //private bool playerIsFocused = false;
     private int cardsPlayedThisTurn = 0;
     private int winCount = 0;
@@ -307,6 +308,7 @@ public class GameManager : MonoBehaviour
                 DrawCards();
         } else
         {
+            this.stunned = false;
             DiscardCards();
             ProcessEnemyEffects();
         }

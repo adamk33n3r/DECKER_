@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using System.Linq;
 
+[System.Serializable]
 public class ActiveEffect
 {
     public Effect effect;
@@ -116,6 +117,7 @@ public class EnemyController : MonoBehaviour
                 GameManager.Instance.PlayEnemyCard(this, firstCard);
             }
         }
+        this.stunned = false;
         OnUpdate();
     }
 
