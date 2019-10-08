@@ -102,7 +102,7 @@ public class GameManager : MonoBehaviour
                     //this.playerIsFocused = true;
                     break;
                 case "Guard":
-                    this.playerGuard = cardEffect.amount;
+                    this.playerGuard.Value = cardEffect.amount;
                     this.activeEffects.Add(new ActiveEffect { effect = cardEffect.effect, amount = cardEffect.amount, timer = cardEffect.time - 1 });
                     break;
                 case "Reboot":
@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviour
         }
         enemy.AddEffects(card.effects.Where((effect) => effect.target == Target.Enemy));
 
-        int totalDamage = card.physicalDamage + this.playerDamageMod;
+        int totalDamage = card.physicalDamage + this.playerDamageMod.Value;
         bool hasHalfAdder = this.playerModules.modules.Any((module) => module.name == "Half Adder");
         if (hasHalfAdder)
             totalDamage++;
@@ -238,7 +238,7 @@ public class GameManager : MonoBehaviour
             if (this.playerXP == this.playerLevel)
             {
                 this.playerLevel++;
-                this.playerXP = 0;
+                this.playerXP.Value = 0;
             }
         }
         SwitchToTurn(Turn.Enemies);
@@ -260,7 +260,7 @@ public class GameManager : MonoBehaviour
     private void ProcessActiveEffects()
     {
         this.playerGuard.Value = 0;
-        this.playerDamageMod = 0;
+        this.playerDamageMod.Value = 0;
         bool hasPassiveScanner = this.playerModules.modules.Any((module) => module.name == "Passive Scanner");
         if (hasPassiveScanner)
             this.playerHP.Value++;
@@ -280,10 +280,10 @@ public class GameManager : MonoBehaviour
                     Debug.Log(this.playerGuard.Value);
                     break;
                 case "Strengthen":
-                    this.playerDamageMod += activeEffect.amount;
+                    this.playerDamageMod.Value += activeEffect.amount;
                     break;
                 case "Weaken":
-                    this.playerDamageMod -= activeEffect.amount;
+                    this.playerDamageMod.Value -= activeEffect.amount;
                     break;
                 case "DOT+":
                     this.playerHP.Value -= activeEffect.amount;
@@ -330,7 +330,7 @@ public class GameManager : MonoBehaviour
 
         var copy = new List<Card>(this.playerInventory.deck);
 
-        int handSize = this.defaultHandSize;
+        int handSize = this.defaultHandSize.Value;
         bool hasGripGloves = this.playerModules.modules.Any((module) => module.name == "Grip Gloves");
         if (hasGripGloves)
             handSize++;

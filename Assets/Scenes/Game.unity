@@ -649,6 +649,7 @@ MonoBehaviour:
   logController: {fileID: 786942253}
   shop: {fileID: 695019167}
   playerModules: {fileID: 11400000, guid: 267e05d97c0d3a1479bb12cde81edbf8, type: 2}
+  activeEffects: []
   enemies:
   - {fileID: 11400000, guid: 4f83a0a0d0bcc2a49ae23f2aae403586, type: 2}
   - {fileID: 11400000, guid: 69bda4f724ddbc44f858856d10457457, type: 2}
@@ -658,6 +659,8 @@ MonoBehaviour:
   enemyPrefab: {fileID: 4932126048042063958, guid: 5f0d4c6f6d5670a4295b699cb3aed815,
     type: 3}
   WhichTurn: 0
+  stunned: 0
+  pierce: 0
 --- !u!4 &109071234
 Transform:
   m_ObjectHideFlags: 0

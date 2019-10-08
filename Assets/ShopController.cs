@@ -62,7 +62,7 @@ public class ShopController : MonoBehaviour
 
     private void PurchaseModule(Module module)
     {
-        this.playerHackerTokens -= module.price;
+        this.playerHackerTokens.Value -= module.price;
         this.playerModules.modules.Add(module);
 
         // Remove module game objects

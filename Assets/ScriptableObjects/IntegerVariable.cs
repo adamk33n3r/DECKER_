@@ -32,17 +32,12 @@ public class IntegerVariable : ScriptableObject
         return a;
     }
 
-    public static implicit operator int(IntegerVariable v) => v.Value;
-    public static implicit operator IntegerVariable(int v)
-    {
-        var iv = CreateInstance<IntegerVariable>();
-        iv.Value = v;
-        return iv;
-    }
-
     public override bool Equals(object other)
     {
-        return base.Equals(other);
+        if (other is IntegerVariable)
+            return this.Value == ((IntegerVariable)other).Value;
+        else
+            return base.Equals(other);
     }
 
     public override int GetHashCode()

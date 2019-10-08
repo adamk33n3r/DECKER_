@@ -17,7 +17,7 @@ public class UIModule : MonoBehaviour
     {
         this.nameText.text = module.name;
         this.costText.text = string.Format("§{0}", module.price);
-        bool tooExpensive = module.price > this.playerHackerTokens;
+        bool tooExpensive = module.price > this.playerHackerTokens.Value;
         this.panelButton.interactable = !tooExpensive;
         this.costImage.color = tooExpensive ? this.panelButton.colors.disabledColor : Color.white;
     }

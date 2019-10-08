@@ -13,7 +13,7 @@ public class CardPoolController : MonoBehaviour
 
     private void OnEnable()
     {
-        var selectedCards = this.availableCards.GetCards(this.playerLevel);
+        var selectedCards = this.availableCards.GetCards(this.playerLevel.Value);
         if (selectedCards.Count() == 0)
         {
             Debug.Log("no cards");

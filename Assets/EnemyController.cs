@@ -101,8 +101,8 @@ public class EnemyController : MonoBehaviour
             //}
 
             // Make card
-            Debug.Log(string.Format("Enemy is level: {0}", this.playerLevel + this.enemyData.levelMod));
-            var cards = this.enemyData.pool.GetCards(this.playerLevel + this.enemyData.levelMod);
+            Debug.Log(string.Format("Enemy is level: {0}", this.playerLevel.Value + this.enemyData.levelMod));
+            var cards = this.enemyData.pool.GetCards(this.playerLevel.Value + this.enemyData.levelMod);
             // Just add the first one
             var firstCard = cards.FirstOrDefault();
             if (firstCard != null)
