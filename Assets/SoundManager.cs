@@ -8,9 +8,18 @@ public class SoundManager : MonoBehaviour
 
     private AudioSource source;
 
+    public static SoundManager Instance;
+
     // Start is called before the first frame update
     void Start()
     {
+        if (Instance != null)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        else
+            Instance = this;
         this.source = GetComponent<AudioSource>();
         DontDestroyOnLoad(this.gameObject);
     }

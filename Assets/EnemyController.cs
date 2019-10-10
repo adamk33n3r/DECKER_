@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Events;
 
 [System.Serializable]
 public class ActiveEffect
@@ -18,6 +19,8 @@ public class EnemyController : MonoBehaviour
     public Enemy enemyData;
     public Inventory inventory;
     public IntegerVariable playerLevel;
+    public UnityEvent DamageEvent;
+    public UnityEvent DeathEvent;
 
     public int damageMod = 0;
     public int health = 10;
@@ -54,12 +57,14 @@ public class EnemyController : MonoBehaviour
             {
                 case "DOT":
                     this.health -= activeEffect.amount;
+                    DamageEvent.Invoke();
                     break;
                 case "Guard":
                     this.guard += activeEffect.amount;
                     break;
                 case "HOT":
                     this.health += activeEffect.amount;
+                    DamageEvent.Invoke();
                     break;
                 case "Scry":
                     this.scry = true;
@@ -75,12 +80,16 @@ public class EnemyController : MonoBehaviour
                     break;
                 case "DOT+":
                     this.health -= activeEffect.amount;
+                    DamageEvent.Invoke();
                     activeEffect.amount++;
                     break;
             }
         }
-        if (this.health < 0)
-            this.health = 0;
+        if (this.health <= 0)
+        {
+            //this.health = 0;
+            DeathEvent.Invoke();
+        }
         OnUpdate();
     }
 
@@ -136,8 +145,11 @@ public class EnemyController : MonoBehaviour
         int modDamage = damage - (pierce ? 0 : this.guard);
         int totalDamage = Mathf.Clamp(modDamage, 0, modDamage);
         this.health -= totalDamage;
-        if (this.health < 0)
-            this.health = 0;
+        if (this.health <= 0)
+        {
+            //this.health = 0;
+            DeathEvent.Invoke();
+        }
 
         OnUpdate();
     }

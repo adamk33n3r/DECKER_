@@ -661,9 +661,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18948631079b77a4ba64bbe651f79faf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activeEffects: []
   enemyData: {fileID: 11400000, guid: ad8f9d71688ba5f4fbcf1e0327a33682, type: 2}
   inventory: {fileID: 11400000, guid: 920848f150a1e974cbefdc31542b2eb9, type: 2}
   playerLevel: {fileID: 11400000, guid: e4d21ec32a1b19d46b48d58a1c49c493, type: 2}
+  DamageEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  DeathEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 421b4e1967bcf9e49a2cd5baff21ca9a, type: 2}
+        m_MethodName: Raise
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   damageMod: 0
   health: 10
   guard: 0

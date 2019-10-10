@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -15,7 +16,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     //public event Action<EnemyController> OnEnemyAction = (enemy) => { };
-    public event System.Action OnActionOnPlayer = () => { };
+    //public event System.Action OnActionOnPlayer = () => { };
+    public UnityEvent ActionOnPlayer;
 
     public IntegerVariable maxPlayerHP;
     public IntegerVariable playerHP;
@@ -29,6 +31,8 @@ public class GameManager : MonoBehaviour
     public IntegerVariable playerDamageMod;
     public IntegerVariable playerHackerTokens;
     public IntegerVariable defaultHandSize;
+    public IntegerReference playerLevelRef;
+    public IntegerReference playerXPRef;
 
     public GameObject cardLocation;
     public CardController cardPrefab;
@@ -166,6 +170,12 @@ public class GameManager : MonoBehaviour
         foreach (var enemy in enemies)
         {
             //Debug.Log("process effects");
+            if (enemy.health <= 0)
+            {
+                Destroy(enemy.gameObject);
+                WinGame();
+                continue;
+            }
             enemy.ProcessEffects();
             if (enemy.health <= 0)
             {
@@ -219,7 +229,7 @@ public class GameManager : MonoBehaviour
             LoseGame();
         }
 
-        OnActionOnPlayer();
+        ActionOnPlayer.Invoke();
     }
 
     public void CodeProgram()
