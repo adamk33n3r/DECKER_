@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   physicalDamage: 5
   level: 3
+  type: {fileID: 11400000, guid: 3796a234018b1f74e8752fdebfdbb997, type: 2}
   effects:
   - effect: {fileID: 11400000, guid: 62a3f7ab059612c48a197f633412c76c, type: 2}
     target: 1

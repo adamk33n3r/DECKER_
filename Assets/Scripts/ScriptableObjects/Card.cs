@@ -26,6 +26,8 @@ public class Card : ScriptableObject
     [Range(1, 5)]
     public int level = 1;
 
+    public CardType type;
+
     public List<CardEffect> effects = new List<CardEffect>();
 
     public override string ToString()

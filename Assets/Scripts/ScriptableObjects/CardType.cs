@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class BoolVariable : ScriptableObject
+public class CardType : ScriptableObject
 {
-    public bool Value;
+    public Color color = Color.magenta;
 }

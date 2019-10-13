@@ -2,21 +2,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
+[ExecuteInEditMode]
 public class UICard : MonoBehaviour
 {
     public TextMeshProUGUI title;
     public TextMeshProUGUI level;
     public TextMeshProUGUI description;
+    public Image mask;
 
     private CardController controller;
     private CanvasGroup canvasGroup;
 
-    private Turn cachedTurn;
-
     void Start()
     {
-        this.cachedTurn = GameManager.Instance.WhichTurn;
+        SetUp();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        //Turn turn = GameManager.Instance.WhichTurn;
+        //if (turn == this.cachedTurn)
+        //    return;
+
+        ////this.gameObject.SetActive(turn == Turn.Player);
+        //this.canvasGroup.alpha = turn == Turn.Player ? 1 : 0.5f;
+        //this.cachedTurn = turn;
+
+#if UNITY_EDITOR
+        SetUp();
+#endif
+
+    }
+
+    private void SetUp()
+    {
         this.controller = GetComponentInParent<CardController>();
         this.canvasGroup = GetComponent<CanvasGroup>();
         this.title.text = this.controller.card.name;
@@ -34,17 +56,7 @@ public class UICard : MonoBehaviour
                 effects += string.Format("{0} ({3}) +{1}: {2}\n", cardEffect.effect.name, cardEffect.amount, cardEffect.time, target);
         }
         this.description.text = effects;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        Turn turn = GameManager.Instance.WhichTurn;
-        if (turn == this.cachedTurn)
-            return;
-
-        //this.gameObject.SetActive(turn == Turn.Player);
-        this.canvasGroup.alpha = turn == Turn.Player ? 1 : 0.5f;
-        this.cachedTurn = turn;
+        if (this.controller.card.type != null)
+            this.mask.material.color = this.controller.card.type.color;
     }
 }
