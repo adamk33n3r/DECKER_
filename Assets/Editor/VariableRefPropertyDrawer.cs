@@ -6,7 +6,8 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 [CustomPropertyDrawer(typeof(IntegerReference))]
-public class IntegerRefPropertyDrawer : PropertyDrawer
+[CustomPropertyDrawer(typeof(FloatReference))]
+public class VariableRefPropertyDrawer : PropertyDrawer
 {
     /// <summary>
     /// Options to display in the popup to select constant or variable.

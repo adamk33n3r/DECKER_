@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "Parts/Module")]
 public class Module : ScriptableObject
 {
     public int price = 1;
