@@ -9,9 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1066402dbacf0eb4e832f3cda2fed265, type: 3}
-  m_Name: CardPool
+  m_Script: {fileID: 11500000, guid: 8e5a73a4c9806b14a8f4925a9aaee8d8, type: 3}
+  m_Name: HOT
   m_EditorClassIdentifier: 
-  pool:
-  - {fileID: 11400000, guid: 1a0c3fedc352c944eac0ee1886becf0d, type: 2}
-  - {fileID: 11400000, guid: b2983421d63d04c48880bc3be658569e, type: 2}
+  color: {r: 0.1882353, g: 0.81960785, b: 0.52156866, a: 1}

@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e5a73a4c9806b14a8f4925a9aaee8d8, type: 3}
   m_Name: DOT
   m_EditorClassIdentifier: 
-  color: {r: 1, g: 0, b: 0.36715746, a: 1}
+  color: {r: 0.764151, g: 0, b: 0, a: 1}

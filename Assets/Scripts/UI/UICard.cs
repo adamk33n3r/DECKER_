@@ -15,6 +15,8 @@ public class UICard : MonoBehaviour
     private CardController controller;
     private CanvasGroup canvasGroup;
 
+    private Material materialCache;
+
     void Start()
     {
         SetUp();
@@ -32,7 +34,8 @@ public class UICard : MonoBehaviour
         //this.cachedTurn = turn;
 
 #if UNITY_EDITOR
-        SetUp();
+        if (!Application.isPlaying)
+            SetUp();
 #endif
 
     }
@@ -57,6 +60,15 @@ public class UICard : MonoBehaviour
         }
         this.description.text = effects;
         if (this.controller.card.type != null)
-            this.mask.material.color = this.controller.card.type.color;
+        {
+
+            if (this.materialCache == null)
+                this.materialCache = new Material(this.mask.material);
+            this.mask.material = this.materialCache;
+            //renderer.SetMaterial(this.materialCache, 0);
+            //renderer.GetMaterial().SetColor("_MaskColor", this.controller.card.type.color);
+            //this.mask.materialForRendering.SetColor("_MaskColor", this.controller.card.type.color);
+            this.mask.material.SetColor("_MaskColor", this.controller.card.type.color);
+        }
     }
 }
